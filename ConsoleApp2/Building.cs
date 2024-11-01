@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp2
 {
-    internal class Program
+    public class Building
     {
-        static void Main(string[] args)
+        private List<Room> _rooms;
+        public List<Room> Rooms
         {
-
+            get { return _rooms; }
+            set { _rooms = value; }
         }
     }
 }

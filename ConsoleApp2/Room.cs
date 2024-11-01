@@ -6,34 +6,56 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp2
 {
-    public class Room : LinksRooms
+    public class Room
     {
-        private Position _position;
+        #region FieldsAndProperties
+        private PositionRoom _position;
+        private int _coins;
+        private float _healt;
+        private float _damage;
 
-        public Position Position
+        public PositionRoom Position
         {
             get { return _position; }
             set { _position = value; }
         }
-        public void SetPosition(int x, int y, int z)
+        public int Coins
         {
-            if (Position.Locked == false)
+            get { return _coins; }
+            set
             {
-                Position.X = x;
-                Position.Y = y;
-                Position.Z = z;
-                Position.Locked = true;
-                return;
+                if (value <= 0)
+                {
+                    _coins = 0;
+                    return;
+                }
+                _coins += value;
             }
-            Console.WriteLine("такая комната уже существует");
+        }
+        public float Health
+        {
+            get { return _healt; }
+            set {  _healt = 100; }
+        }
+        public float Damage
+        {
+            get { return _damage; }
+            set { _damage = value; }
+        }
+        #endregion
+
+        #region Constructors
+        public Room(PositionRoom positionRoom, int coin)
+        {
+            Position = positionRoom;
+            Coins = coin;
+        }
+        public Room(PositionRoom positionRoom) : this(positionRoom, 0)
+        {
+            
         }
 
-        protected override Room CurrentRoom { get => this;}
-        protected override List<Room> SecondsRooms { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public override Dictionary<Room, List<Room>> LinksRoom { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Room(Position position)
-        {
-            _position = position;
-        }
+        #endregion
+
     }
 }
