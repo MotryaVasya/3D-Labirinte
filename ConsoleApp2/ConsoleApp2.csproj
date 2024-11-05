@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Building.cs" />
     <Compile Include="LinksRooms.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PositionRoom.cs" />
