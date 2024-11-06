@@ -6,25 +6,54 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp2
 {
-    public class BuildingManager : Random
+    public class BuildingManager
     {
         private List<Room> _rooms;
+        private List<PositionRoom> _positionsRooms;
+        private Random rnd;
         public BuildingManager()
         {
             _rooms = new List<Room>();
+            _positionsRooms = new List<PositionRoom>();
+            rnd = new Random();
         }
         public void CreateRooms(int MaxX, int MaxY, int MaxZ) // доделать генерацию комнат не квадратом
         {
-            for (int i = 0; i < MaxX; i++)
+            int index = 0;
+
+            while (index != MaxX * MaxY * MaxZ)
             {
-                for (int j = 0; j < MaxY; j++)
+                int x = rnd.Next(0, MaxX);
+                int y = rnd.Next(0, MaxY);
+                int z = rnd.Next(0, MaxZ);
+                foreach (var item in _positionsRooms)
                 {
-                    for (int k = 0; k < MaxZ; k++)
-                    {
-                        _rooms.Add(new Room(new PositionRoom(i, j, k)));
-                    }
                 }
+                _positionsRooms.Add(new PositionRoom(x, y, z));
+                _rooms.Add(new Room(new PositionRoom(x, y, z)));
+                index++;
             }
+        }
+        private PositionRoom SetPositionForRoom(int MaxX, int MaxY, int MaxZ)
+        {
+            int x = rnd.Next(0, MaxX);
+            int y = rnd.Next(0, MaxY);
+            int z = rnd.Next(0, MaxZ);
+
+            PositionRoom positionRoom = new PositionRoom(x, y, z);
+            
+            if (_positionsRooms.Contains(positionRoom))
+            {
+                positionRoom = new PositionRoom
+                    (
+                    x += rnd.Next(x >= 1 ? x - 1 : 0, x + 1),
+                    y += rnd.Next(y >= 1 ? y - 1 : 0, y + 1),
+                    z += rnd.Next(z >= 1 ? z - 1 : 0, z + 1)
+                    );
+
+            }
+
+            return positionRoom;
         }
         public void ShowInfo()
         {
