@@ -8,17 +8,16 @@ namespace ConsoleApp2
 {
     public class Room
     {
-        #region FieldsAndProperties
-        private PositionRoom _position;
+        #region Fields
         private int _coins;
-        private float _healt;
-        private float _damage;
-
-        public PositionRoom Position
-        {
-            get { return _position; }
-            set { _position = value; }
-        }
+        private float _healt = 100;
+        private bool _damage;
+        private int _indexX;
+        private int _indexY;
+        #endregion
+        #region Properties
+        public int IndexX { get => _indexX; set => _indexX = value; }
+        public int IndexY { get => _indexY; set => _indexY = value; }
         public int Coins
         {
             get { return _coins; }
@@ -35,9 +34,8 @@ namespace ConsoleApp2
         public float Health
         {
             get { return _healt; }
-            set {  _healt = 100; }
         }
-        public float Damage
+        public bool Damage
         {
             get { return _damage; }
             set { _damage = value; }
@@ -45,16 +43,22 @@ namespace ConsoleApp2
         #endregion
 
         #region Constructors
-        public Room(PositionRoom positionRoom, int coin)
-        {
-            Position = positionRoom;
-            Coins = coin;
-        }
-        public Room(PositionRoom positionRoom) : this(positionRoom, 0)
+        public Room(int indexX, int indexY, int coin, bool damage)
         {
             
+            IndexX = indexX;
+            IndexY = indexY;
+            Coins = coin;
+            Damage = damage;
         }
-
+        public Room(int indexX, int indexY, int coin)
+        {
+            IndexX = indexX;
+            IndexY = indexY;
+            Coins = coin;
+            Damage = false;
+        }
+        public Room(int indexX, int indexY) : this(indexX, indexY, 0, false) { }
         #endregion
 
     }

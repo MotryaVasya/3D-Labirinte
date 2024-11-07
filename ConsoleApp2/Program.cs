@@ -11,7 +11,7 @@ namespace ConsoleApp2
         static void Main(string[] args)
         {
             BuildingManager buildingManager = new BuildingManager();
-            buildingManager.CreateRooms(5,5,2);
+            buildingManager.CreateRooms(5,5);
             buildingManager.ShowInfo();
             Console.ReadLine();
         }

@@ -8,58 +8,62 @@ namespace ConsoleApp2
 {
     public class BuildingManager
     {
-        private List<Room> _rooms;
-        private List<PositionRoom> _positionsRooms;
+        private Floor _floor;
+        private int[,] _positionsRooms;
+        private List<Floor> _floors;
         private Random rnd;
+
+
         public BuildingManager()
         {
-            _rooms = new List<Room>();
-            _positionsRooms = new List<PositionRoom>();
+            _floors = new List<Floor>();
+            _floor = new Floor(new List<Room>(), 0);
             rnd = new Random();
+
         }
-        public void CreateRooms(int MaxX, int MaxY, int MaxZ) // доделать генерацию комнат не квадратом
+        public void CreateRooms(int MaxX, int MaxY) // доделать генерацию комнат не квадратом
         {
             int index = 0;
 
-            while (index != MaxX * MaxY * MaxZ)
+            while (index != MaxX * MaxY - 20)
             {
-                int x = rnd.Next(0, MaxX);
-                int y = rnd.Next(0, MaxY);
-                int z = rnd.Next(0, MaxZ);
-                foreach (var item in _positionsRooms)
-                {
-                }
-                _positionsRooms.Add(new PositionRoom(x, y, z));
-                _rooms.Add(new Room(new PositionRoom(x, y, z)));
+                var room = SetPositionForRoom(MaxX, MaxY);
+                _floor.AddRoom(room);
                 index++;
             }
+            _floors.Add(_floor);
         }
-        private PositionRoom SetPositionForRoom(int MaxX, int MaxY, int MaxZ)
+
+        private Room SetPositionForRoom(int MaxX, int MaxY)
         {
             int x = rnd.Next(0, MaxX);
             int y = rnd.Next(0, MaxY);
-            int z = rnd.Next(0, MaxZ);
 
-            PositionRoom positionRoom = new PositionRoom(x, y, z);
-            
-            if (_positionsRooms.Contains(positionRoom))
+            foreach (var item in _floor.Rooms)
             {
-                positionRoom = new PositionRoom
-                    (
-                    x += rnd.Next(x >= 1 ? x - 1 : 0, x + 1),
-                    y += rnd.Next(y >= 1 ? y - 1 : 0, y + 1),
-                    z += rnd.Next(z >= 1 ? z - 1 : 0, z + 1)
-                    );
-
+                if (item.IndexX == x && item.IndexY == y)
+                {
+                    x += rnd.Next(
+                        x >= 1 ? x - 1 : 0,
+                        x >= MaxX ? x - 1 : x + 1);
+                    y += rnd.Next(
+                        y >= 1 ? y - 1 : 0,
+                        y >= MaxY ? y - 1 : y + 1);
+                    return new Room(x,y);
+                }
             }
 
-            return positionRoom;
+
+            return new Room(x,y);
         }
         public void ShowInfo()
         {
-            foreach (var item in _rooms)
+            foreach (var item in _floors)
             {
-                Console.WriteLine($"{item.Position.Z} - {item.Position.X} - {item.Position.Y}");
+                foreach (var item1 in item.Rooms)
+                {
+                    Console.WriteLine($"{item1.IndexX} - {item1.IndexY}");
+                }
             }
         }
 
