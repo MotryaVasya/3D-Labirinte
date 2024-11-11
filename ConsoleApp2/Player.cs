@@ -10,7 +10,12 @@ namespace ConsoleApp2
     {
         private float _health;
         private float _wallet;
-
+        private (int, int) _curentCoord = (0, 0);
+        public (int, int) CurentCoord
+        {
+            get { return _curentCoord; }
+            set { _curentCoord = value; }
+        }
         public float Health
         {
             get
@@ -26,14 +31,14 @@ namespace ConsoleApp2
         }
         public float Wallet
         {
-            get 
-            { 
-                return _wallet <= 0?0:_wallet; 
+            get
+            {
+                return _wallet <= 0 ? 0 : _wallet;
             }
-            set 
-            { 
+            set
+            {
                 if (_wallet <= 0) _wallet = 0;
-                _wallet = value; 
+                _wallet = value;
             }
         }
         private bool IsDie()

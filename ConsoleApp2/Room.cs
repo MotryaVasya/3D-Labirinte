@@ -12,12 +12,14 @@ namespace ConsoleApp2
         private int _coins;
         private float _healt = 100;
         private bool _damage;
-        private int _indexX;
-        private int _indexY;
+        private (int,int) _coord;
         #endregion
         #region Properties
-        public int IndexX { get => _indexX; set => _indexX = value; }
-        public int IndexY { get => _indexY; set => _indexY = value; }
+        public (int, int) Coord
+        {
+            get {  return _coord; }
+            set {  _coord = value; }
+        }
         public int Coins
         {
             get { return _coins; }
@@ -45,16 +47,14 @@ namespace ConsoleApp2
         #region Constructors
         public Room(int indexX, int indexY, int coin, bool damage)
         {
-            
-            IndexX = indexX;
-            IndexY = indexY;
+
+            Coord = (indexX, indexY);
             Coins = coin;
             Damage = damage;
         }
         public Room(int indexX, int indexY, int coin)
         {
-            IndexX = indexX;
-            IndexY = indexY;
+            Coord = (indexX, indexY);
             Coins = coin;
             Damage = false;
         }
