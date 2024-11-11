@@ -28,7 +28,7 @@ namespace ConsoleApp2
         {
             int max = MaxX * MaxY - 20;
             Room room;
-            int r;
+            int Move;
 
             for (int i = 0; i < max; i++)
             {
@@ -38,30 +38,41 @@ namespace ConsoleApp2
                     LinksRooms.SecondsRooms.Add(room);
                     if (i == 0 && j == 0)
                     {
-                        r = rnd.Next(1, 2);// 1 = вверх | 2 = вправо
+                        Move = rnd.Next(1, 2);// 1 = вверх | 2 = в право
+                        SetMove(Move);
+
                     }
                     if (i == 0 && j == MaxY)
                     {
-                        r = rnd.Next(-1, 1);
-                        while (r == 0)
+                        Move = rnd.Next(-1, 1);
+                        while (Move == 0)
                         {
-                            r = rnd.Next(-1, 1);
+                            Move = rnd.Next(-1, 1); // 1 = вверх | -1 = в лево
                         }
                     }
                     if (i == MaxX && j == 0)
                     {
-                        r = rnd.Next(1, 2);// 1 = вниз | 2 = вправо
+                        Move = rnd.Next(1, 2);// 1 = вниз | 2 = в право
 
                     }
-                    if (true) // доделать if
+                    if (i == MaxX && j == MaxY)
                     {
-
+                        Move = rnd.Next(-1, 1);
+                        while (Move == 0)
+                        {
+                            Move = rnd.Next(-1, 1); // 1 = вверх | -1 = в лево
+                        };
                     }
                     _floor.AddRoom(room);
                 }
 
             }
             _floors.Add(_floor);
+        }
+
+        private void SetMove(int move) // доделать метод 
+        {
+            throw new NotImplementedException();
         }
 
         private void SetLincsForRoom(int MaxX, int MaxY)
