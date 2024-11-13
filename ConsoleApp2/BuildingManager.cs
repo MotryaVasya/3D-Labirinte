@@ -64,7 +64,7 @@ namespace ConsoleApp2
 
             while (LinksRoom.Count != 5)
             {
-                int move = rnd.Next(-2, 3);
+                int move = rnd.Next(-2, 4);
                 switch (move)
                 {
                     case 1: //вверх
@@ -101,75 +101,25 @@ namespace ConsoleApp2
         }
         private void SetLinks(int move)
         {
-            if (CurrentRoom.Coord.Item2 < Maximum.Item2 && CurrentRoom.Coord.Item2 >= 0)   // вверх и вниз
+            if (CurentRoom.Coord.Item2 < Maximum.Item2 && CurentRoom.Coord.Item2 >= 0 ||
+                CurentRoom.Coord.Item1 < Maximum.Item1 && CurentRoom.Coord.Item1 >= 0)   // вверх и вниз
             {
-                if (move == 1)
-                {
-                    if (CheckContainceByCoords(SecondsRooms, CurrentRoom, move))
-                    {
-                        foreach (var item in SecondsRooms)
-                        {
-                            if (item.Coord.Item2 == CurrentRoom.Coord.Item2 + 1 && CheckLinks(CurrentRoom, item))
-                            {
-                                LinksRoom.Add(CurrentRoom, new List<Room>() { item });
-                                CurrentRoom = item;
-                                return;
-                            }
-                        }
-                    }
-                }
-                if (move == -1)
-                {
-                    if (CheckContainceByCoords(SecondsRooms, CurrentRoom, move))
-                    {
-                        foreach (var item in SecondsRooms)
-                        {
 
-                            if (item.Coord.Item2 == CurrentRoom.Coord.Item2 - 1 && CheckLinks(CurrentRoom, item))
-                            {
-                                LinksRoom.Add(CurrentRoom, new List<Room>() { item });
-                                CurrentRoom = item;
-                                return;
-                            }
+                if (CheckContainceByCoords(SecondsRooms, CurentRoom, move))
+                {
+                    foreach (var item in SecondsRooms)
+                    {
+                        if (CheckEgaleCoords(item.Coord, CurentRoom.Coord, move) && CheckLinks(CurentRoom, item))
+                        {
+                            LinksRoom.Add(CurentRoom, new List<Room>() { item });
+                            CurentRoom = item;
+                            return;
                         }
                     }
                 }
             }
-
-            if (CurrentRoom.Coord.Item1 < Maximum.Item1 && CurrentRoom.Coord.Item1 >= 0)   // в лево и в право
-            {
-                if (move == 2)
-                {
-                    if (CheckContainceByCoords(SecondsRooms, CurrentRoom, move))  
-                    {
-                        foreach (var item in SecondsRooms)
-                        {
-                            if (item.Coord.Item1 == CurrentRoom.Coord.Item1 + 1 && CheckLinks(CurrentRoom, item))
-                            {
-                                LinksRoom.Add(CurrentRoom, new List<Room>() { item });
-                                CurrentRoom = item;
-                                return;
-                            }
-                        }
-                    }
-                }
-                if (move == -2)
-                {
-                    if (CheckContainceByCoords(SecondsRooms, CurrentRoom, move))
-                    {
-                        foreach (var item in SecondsRooms)
-                        {
-                            if (item.Coord.Item1 == CurrentRoom.Coord.Item1 - 1 && CheckLinks(CurrentRoom, item))
-                            {
-                                LinksRoom.Add(CurrentRoom, new List<Room>() { item });
-                                CurrentRoom = item;
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-            /* if (move == 0)
+            /* 
+             if (move == 0)
              {
                  foreach (var item in _floors)
                  {
@@ -191,7 +141,8 @@ namespace ConsoleApp2
                      break;
                  }
              }*/
-            /*if (move == 3)
+            /*
+            if (move == 3)
             {
                 foreach (var item in _floors)
                 {
@@ -242,6 +193,25 @@ namespace ConsoleApp2
 
             return false;
         }
+        private bool CheckEgaleCoords((int, int) SecondRoomCoord, (int, int) CurentRoomCoord, int m)
+        {
+            switch (m)
+            {
+                case 1:
+                    if (SecondRoomCoord.Item2 == CurentRoomCoord.Item2 + 1 && SecondRoomCoord.Item1 == CurentRoomCoord.Item1) return true;
+                    break;
+                case -1:
+                    if (SecondRoomCoord.Item2 == CurentRoomCoord.Item2 - 1 && SecondRoomCoord.Item1 == CurentRoomCoord.Item1) return true;
+                    break;
+                case 2:
+                    if (SecondRoomCoord.Item2 == CurentRoomCoord.Item2 && SecondRoomCoord.Item1 == CurentRoomCoord.Item1 + 1) return true;
+                    break;
+                case -2:
+                    if (SecondRoomCoord.Item2 == CurentRoomCoord.Item2 && SecondRoomCoord.Item1 == CurentRoomCoord.Item1 - 1) return true;
+                    break;
+            }
+            return false;
+        }
 
         private bool CheckLinks(Room CheckedKey, Room CheckedValue) // сделать тоже самое только по кординатам потому что создает новый объект класса и занимает другую память
         {
@@ -250,10 +220,8 @@ namespace ConsoleApp2
                 foreach (var values in LinksRoom.Values)
                 {
                     foreach (var value in values)
-                    {//     0,0     1,0           1,0       0,0           0,0          0,0
-                        Console.WriteLine(key);
-                        Console.WriteLine(CheckedValue);
-                        if (key == CheckedKey && value == CheckedValue || key == CheckedValue && value == CheckedKey)
+                    {  
+                        if (key.Coord == CheckedKey.Coord && value.Coord == CheckedValue.Coord || key.Coord == CheckedValue.Coord && value.Coord == CheckedKey.Coord)
                         {
                             Console.WriteLine("такая связь уже есть");
                             return false;

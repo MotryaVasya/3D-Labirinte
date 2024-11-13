@@ -14,7 +14,7 @@ namespace ConsoleApp2
         private Dictionary<Room, List<Room>> _linksRoom { get; set; }
         #endregion
         #region Properties
-        public Room CurrentRoom
+        public Room CurentRoom
         {
             get { return _currentRoom; }
             set { _currentRoom = value; }
@@ -35,7 +35,7 @@ namespace ConsoleApp2
         {
             LinksRoom = new Dictionary<Room, List<Room>>();
             SecondsRooms = new List<Room>();
-            CurrentRoom = new Room(0, 0);
+            CurentRoom = new Room(0, 0);
         }
         #endregion
         #region InfoMethods
