@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SL_Library">
+      <HintPath>..\..\..\..\Desktop\TotalBattle\TotalBattle\dll\SL_Library.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="BuildingManager.cs" />
+    <Compile Include="SL_Manager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

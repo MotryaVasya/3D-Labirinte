@@ -17,6 +17,7 @@ namespace ConsoleApp2
         private (int, int, int) _maximum;
 
         #endregion
+        private SL_Manager SL_manager;
         #region Constructors
         public BuildingManager((int, int, int) maxX_and_maxY_and_maxFloors)
         {
@@ -24,6 +25,7 @@ namespace ConsoleApp2
             Floor = new Floor(new List<Room>(), 0);
             rnd = new Random();
             Maximum = maxX_and_maxY_and_maxFloors;
+            SL_manager = new SL_Manager();
 
         }
 
@@ -36,20 +38,23 @@ namespace ConsoleApp2
         #endregion
         public void CreateRooms()
         {
-
             Room room;
-            for (int i = 0; i < Maximum.Item1; i++)
+            for (int f = 1; f <= Maximum.Item3; f++)
             {
-                for (int j = 0; j < Maximum.Item2; j++)
+                for (int i = 0; i < Maximum.Item1; i++)
                 {
-                    room = new Room(i, j);
-                    SecondsRooms.Add(room);
-                    Floor.AddRoom(room);
+                    for (int j = 0; j < Maximum.Item2; j++)
+                    {
+                        room = new Room(i, j);
+                        SecondsRooms.Add(room);
+                        Floor.AddRoom(room);
+                    }
                 }
-
+                Floor.Level++;
+                Floors.Add(Floor);
+                RandomizeLinks();
+                Floor.CleareRooms();
             }
-            Method();
-            Floors.Add(Floor);
         }
         /*
              1 = вверх
@@ -59,12 +64,16 @@ namespace ConsoleApp2
              0 = вверх по этажу
              3 = вниз по этажу
         */
-        private void Method() // назвать по другому
+        private void RandomizeLinks() // назвать по другому
         {
 
-            while (LinksRoom.Count != 5)
+            while (LinksRoom.Count != 3)
             {
-                int move = rnd.Next(-2, 4);
+                int move = rnd.Next(-2, 3);
+                while (move == 0)
+                {
+                    move = rnd.Next(-2, 3);
+                }
                 switch (move)
                 {
                     case 1: //вверх
@@ -72,32 +81,22 @@ namespace ConsoleApp2
                         break;
                     case -1://вниз
                         SetLinks(-1);
-
                         break;
                     case 2://в право
                         SetLinks(2);
-
                         break;
                     case -2://в лево
                         SetLinks(-2);
-
-                        break;
-                    case 0://вверх по этажу
-                        SetLinks(0);
-                        break;
-                    case 3://вниз по этажу
-                        SetLinks(3);
                         break;
                 }
 
             }
+
             // это временно. для вывода информации
-            for (int i = 0; i < 5; i++)
-            {
-                Console.WriteLine("");
-            }
+            WriteEmptyAndFloorLvl();
             ShowInfo(LinksRoom);
-            return;
+            SL_manager.Save(LinksRoom,SL_manager.Path, false);
+            LinksRoom.Clear();
         }
         private void SetLinks(int move)
         {
@@ -118,52 +117,6 @@ namespace ConsoleApp2
                     }
                 }
             }
-            /* 
-             if (move == 0)
-             {
-                 foreach (var item in _floors)
-                 {
-                     foreach (var item1 in item.Rooms)
-                     {
-
-                     }
-                 }
-
-
-                 foreach (var item in SecondsRooms)
-                 {
-                     if (CheckLinks(CurrentRoom, item) == false)
-                     {
-                         LinksRoom.Add(CurrentRoom, new List<Room>() { item });
-                         CurrentRoom = item;
-                         return;
-                     }
-                     break;
-                 }
-             }*/
-            /*
-            if (move == 3)
-            {
-                foreach (var item in _floors)
-                {
-                    foreach (var item1 in item.Rooms)
-                    {
-
-                    }
-                }
-
-
-                foreach (var item in SecondsRooms)
-                {
-                    if (CheckLinks(CurrentRoom, item) == false)
-                    {
-                        LinksRoom.Add(CurrentRoom, new List<Room>() { item });
-                        CurrentRoom = item;
-                        return;
-                    }
-                    break;
-                }
-            }*/
         }
 
         private bool CheckContainceByCoords(List<Room> secondsRooms, Room currentRoom, int move)
@@ -183,10 +136,6 @@ namespace ConsoleApp2
                         break;
                     case -2:
                         if (item.Coord.Item1 == currentRoom.Coord.Item1 - 1 && item.Coord.Item2 == currentRoom.Coord.Item2) return true;
-                        break;
-                    case 0:
-                        break;
-                    case 3:
                         break;
                 }
             }
@@ -212,7 +161,6 @@ namespace ConsoleApp2
             }
             return false;
         }
-
         private bool CheckLinks(Room CheckedKey, Room CheckedValue) // сделать тоже самое только по кординатам потому что создает новый объект класса и занимает другую память
         {
             foreach (var key in LinksRoom.Keys)
@@ -220,10 +168,9 @@ namespace ConsoleApp2
                 foreach (var values in LinksRoom.Values)
                 {
                     foreach (var value in values)
-                    {  
+                    {
                         if (key.Coord == CheckedKey.Coord && value.Coord == CheckedValue.Coord || key.Coord == CheckedValue.Coord && value.Coord == CheckedKey.Coord)
                         {
-                            Console.WriteLine("такая связь уже есть");
                             return false;
                         }
                     }
@@ -243,6 +190,14 @@ namespace ConsoleApp2
                     Console.WriteLine("");
                 }
             }
+        }
+        public void WriteEmptyAndFloorLvl()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                Console.WriteLine("");
+            }
+            Console.WriteLine($"level: {Floor.Level}");
         }
         #endregion
 

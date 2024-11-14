@@ -10,9 +10,9 @@ namespace ConsoleApp2
     {
         static void Main(string[] args)
         {
-            BuildingManager buildingManager = new BuildingManager((5, 5, 3));
+            BuildingManager buildingManager = new BuildingManager((3, 3, 4));
             buildingManager.CreateRooms();
-            //buildingManager.ShowInfo();
+            buildingManager.ShowInfo();
             Console.WriteLine("");
             Console.ReadLine();
         }
