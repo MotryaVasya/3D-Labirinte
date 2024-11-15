@@ -6,46 +6,25 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp2
 {
-    public class SL_Manager : SL_Service<Dictionary<Room, List<Room>>>
+    public class SL_Manager : SL_Service<Player>
     {
         public string Path { get; } = "C:\\Users\\STUDENT\\source\\repos\\3D-Labirinte\\ConsoleApp2\\Informations";
-        protected override Dictionary<Room, List<Room>> CreateObjectFromData(string[] data)
+        protected override Player CreateObjectFromData(string[] data)
         {
-            Dictionary<Room, List<Room>> keyValuePairs = new Dictionary<Room, List<Room>>();
-            List<Room> list = new List<Room>();
+            Player player = new Player();
 
-            foreach (string item in data)
-            {
-                foreach (var simbol in item)
-                {
-                    //Room newRoom = new Room();
-                    //list.Add(new Room());
-
-                }
-            }
-            return keyValuePairs;
+            // сделать сохранение Player
+            return player;
         }
 
-        protected override string[] GetDataFromObject(Dictionary<Room, List<Room>> data)
+        protected override string[] GetDataFromObject(Player data)
         {
-            string[] strings = new string[data.Count * 10];
+            string[] strings = new string[50];
             int index = 0;
-            foreach (var key in data.Keys)
-            {
-                strings[index] += (key.Coord.Item1, SptChar, key.Coord.Item2, SptChar, key.Health, SptChar, key.Coins, "\n").ToString();
-                index++;
-                foreach (var values in data.Values)
-                {
-                    foreach (var value in values)
-                    {
-                        strings[index] += (value.Coord.Item1, SptChar, value.Coord.Item2, SptChar, value.Health, SptChar, value.Coins, "\n").ToString();
-                        index++;
-                    }
-                }
-
-                strings[index++] += "-";
-            }
+            // сделать сохранение Player
             return strings;
         }
+
+
     }
 }

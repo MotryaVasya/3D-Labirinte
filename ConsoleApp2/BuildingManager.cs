@@ -11,49 +11,50 @@ namespace ConsoleApp2
     public class BuildingManager : LinksRooms
     {
         #region Fields
-        private Floor _floor;
         private List<Floor> _floors;
         private Random rnd;
         private (int, int, int) _maximum;
+        private SL_Manager _SL_manager;
+        private Dictionary<Room, Room> _NewlinksRoom;
+        private Player _player;
 
         #endregion
-        private SL_Manager SL_manager;
+        #region Properties
+        public Dictionary<Room, Room> NewLinksRoom { get { return _NewlinksRoom; } set { _NewlinksRoom = value; } }
+        public List<Floor> Floors { get => _floors; set => _floors = value; }
+        public (int, int, int) Maximum { get => _maximum; set => _maximum = value; }
+        public SL_Manager SL_Manager { get => _SL_manager; set => _SL_manager = value; }
+        public Player Player { get => _player; set => _player = value; }
+        #endregion
         #region Constructors
         public BuildingManager((int, int, int) maxX_and_maxY_and_maxFloors)
         {
             Floors = new List<Floor>();
-            Floor = new Floor(new List<Room>(), 0);
             rnd = new Random();
             Maximum = maxX_and_maxY_and_maxFloors;
-            SL_manager = new SL_Manager();
-
+            SL_Manager = new SL_Manager();
+            NewLinksRoom = new Dictionary<Room, Room>();
+            Player = new Player();
         }
-
-        #endregion
-        #region Properties
-        public Floor Floor { get => _floor; set => _floor = value; }
-        public List<Floor> Floors { get => _floors; set => _floors = value; }
-        public (int, int, int) Maximum { get => _maximum; set => _maximum = value; }
-
         #endregion
         public void CreateRooms()
         {
             Room room;
             for (int f = 1; f <= Maximum.Item3; f++)
             {
+                var floor = new Floor(new List<Room>(), f);
                 for (int i = 0; i < Maximum.Item1; i++)
                 {
                     for (int j = 0; j < Maximum.Item2; j++)
                     {
-                        room = new Room(i, j);
+                        room = new Room(i, j, rnd.Next(5), rnd.Next(5).Equals(2));
                         SecondsRooms.Add(room);
-                        Floor.AddRoom(room);
+                        floor.AddRoom(room);
                     }
                 }
-                Floor.Level++;
-                Floors.Add(Floor);
+                Floors.Add(floor);
+                Console.WriteLine($"lvl: {f}");
                 RandomizeLinks();
-                Floor.CleareRooms();
             }
         }
         /*
@@ -64,6 +65,46 @@ namespace ConsoleApp2
              0 = вверх по этажу
              3 = вниз по этажу
         */
+        private void SetValuesForPlayer()
+        {
+            var Input = Console.ReadKey(true).Key;
+            switch (Input)
+            {
+                case ConsoleKey.UpArrow:
+                    CheckMove(1);
+                    break;
+            }
+        }
+        private void CheckMove(int move)
+        {
+            foreach (KeyValuePair<Room, Room> item in NewLinksRoom)
+            {
+                switch (move)
+                {
+                    case 1: //вверх
+                        SetValue(item);
+                        break;
+                    case -1://вниз
+                        SetValue(item);
+                        break;
+                    case 2://вправо
+                        SetValue(item);
+                        break;
+                    case -2://влево
+                        SetValue(item);
+                        break;
+                }
+            }
+
+        }
+        private void SetValue(KeyValuePair<Room, Room> room)
+        {
+            Player.CurentCoord = room.Value.Coord;
+            Player.Health = room.Value.Damage == true ? Player.Health - 2 : Player.Health;
+            Player.Health = room.Value.Health;
+            Player.Wallet += room.Value.Coins;
+
+        }
         private void RandomizeLinks() // назвать по другому
         {
 
@@ -82,10 +123,10 @@ namespace ConsoleApp2
                     case -1://вниз
                         SetLinks(-1);
                         break;
-                    case 2://в право
+                    case 2://вправо
                         SetLinks(2);
                         break;
-                    case -2://в лево
+                    case -2://влево
                         SetLinks(-2);
                         break;
                 }
@@ -93,10 +134,11 @@ namespace ConsoleApp2
             }
 
             // это временно. для вывода информации
-            WriteEmptyAndFloorLvl();
-            ShowInfo(LinksRoom);
-            SL_manager.Save(LinksRoom,SL_manager.Path, false);
+            SL_Manager.Save(Player /*добавить Player*/, SL_Manager.Path, true);
+            NewLinksRoom = CopyDictionary(LinksRoom);
             LinksRoom.Clear();
+            //ShowInfo(NewLinksRoom);
+            SetValuesForPlayer();
         }
         private void SetLinks(int move)
         {
@@ -110,7 +152,7 @@ namespace ConsoleApp2
                     {
                         if (CheckEgaleCoords(item.Coord, CurentRoom.Coord, move) && CheckLinks(CurentRoom, item))
                         {
-                            LinksRoom.Add(CurentRoom, new List<Room>() { item });
+                            LinksRoom.Add(CurentRoom, item);
                             CurentRoom = item;
                             return;
                         }
@@ -165,20 +207,22 @@ namespace ConsoleApp2
         {
             foreach (var key in LinksRoom.Keys)
             {
-                foreach (var values in LinksRoom.Values)
+                foreach (var value in LinksRoom.Values)
                 {
-                    foreach (var value in values)
+                    if (key.Coord == CheckedKey.Coord && value.Coord == CheckedValue.Coord || key.Coord == CheckedValue.Coord && value.Coord == CheckedKey.Coord)
                     {
-                        if (key.Coord == CheckedKey.Coord && value.Coord == CheckedValue.Coord || key.Coord == CheckedValue.Coord && value.Coord == CheckedKey.Coord)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
             }
             return true;
         }
 
+        private Dictionary<Room, Room> CopyDictionary(Dictionary<Room, Room> Curent)
+        {
+            return Curent.ToDictionary(entry => entry.Key, entry => entry.Value); ;
+
+        }
         #region InfoMethods
         public void ShowInfo()
         {
@@ -197,7 +241,10 @@ namespace ConsoleApp2
             {
                 Console.WriteLine("");
             }
-            Console.WriteLine($"level: {Floor.Level}");
+            foreach (var item in Floors)
+            {
+                Console.WriteLine($"level: {item.Level}");//
+            }
         }
         #endregion
 

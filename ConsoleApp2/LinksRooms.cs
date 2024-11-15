@@ -11,7 +11,7 @@ namespace ConsoleApp2
         #region Fields
         private Room _currentRoom;
         private List<Room> _secondsRooms;
-        private Dictionary<Room, List<Room>> _linksRoom { get; set; }
+        private Dictionary<Room, Room> _linksRoom { get; set; }
         #endregion
         #region Properties
         public Room CurentRoom
@@ -24,7 +24,7 @@ namespace ConsoleApp2
             get { return _secondsRooms; }
             set { _secondsRooms = value; }
         }
-        public Dictionary<Room, List<Room>> LinksRoom
+        public Dictionary<Room, Room> LinksRoom
         {
             get { return _linksRoom; }
             set { _linksRoom = value; }
@@ -33,7 +33,7 @@ namespace ConsoleApp2
         #region Constructors
         protected LinksRooms()
         {
-            LinksRoom = new Dictionary<Room, List<Room>>();
+            LinksRoom = new Dictionary<Room, Room>();
             SecondsRooms = new List<Room>();
             CurentRoom = new Room(0, 0);
         }
@@ -47,15 +47,12 @@ namespace ConsoleApp2
                 Console.WriteLine("");
             }
         }
-        public void ShowInfo(Dictionary<Room, List<Room>> LinksRoom)
+        public void ShowInfo(Dictionary<Room, Room> LinksRoom)
         {
             foreach (var item in LinksRoom)
             {
                 Console.WriteLine($"Key X: {item.Key.Coord.Item1} - Y: {item.Key.Coord.Item2}");
-                foreach (var item2 in item.Value)
-                {
-                    Console.WriteLine($"Value X: {item2.Coord.Item1} - Y: {item2.Coord.Item2}");
-                }
+                Console.WriteLine($"Value X: {item.Value.Coord.Item1} - Y: {item.Value.Coord.Item2}");
                 Console.WriteLine("");
             }
         }

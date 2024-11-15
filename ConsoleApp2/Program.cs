@@ -12,7 +12,7 @@ namespace ConsoleApp2
         {
             BuildingManager buildingManager = new BuildingManager((3, 3, 4));
             buildingManager.CreateRooms();
-            buildingManager.ShowInfo();
+            //buildingManager.ShowInfo();
             Console.WriteLine("");
             Console.ReadLine();
         }
