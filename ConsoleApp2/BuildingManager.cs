@@ -73,41 +73,57 @@ namespace ConsoleApp2
                 case ConsoleKey.UpArrow:
                     CheckMove(1);
                     break;
+                case ConsoleKey.DownArrow:
+                    CheckMove(-1);
+                    break;
+                case ConsoleKey.LeftArrow:
+                    CheckMove(-2);
+                    break;
+                case ConsoleKey.RightArrow:
+                    CheckMove(2);
+                    break;
+
             }
         }
         private void CheckMove(int move)
         {
+            int index = 0;
             foreach (KeyValuePair<Room, Room> item in NewLinksRoom)
             {
-                switch (move)
+                while (index < 1)
                 {
-                    case 1: //вверх
-                        SetValue(item);
-                        break;
-                    case -1://вниз
-                        SetValue(item);
-                        break;
-                    case 2://вправо
-                        SetValue(item);
-                        break;
-                    case -2://влево
-                        SetValue(item);
-                        break;
+                    switch (move)
+                    {
+                        case 1: //вверх
+                            SetValue(item);
+                            break;
+                        case -1://вниз
+                            SetValue(item);
+                            break;
+                        case 2://вправо
+                            SetValue(item);
+                            break;
+                        case -2://влево
+                            SetValue(item);
+                            break;
+                    }
+                    index++;
                 }
             }
-
         }
-        private void SetValue(KeyValuePair<Room, Room> room)
+        private void SetValue(KeyValuePair<Room, Room> room)// доделать 
         {
+            if (Player.CurentCoord == (Maximum.Item1,Maximum.Item2))
+            {
+                
+            }
             Player.CurentCoord = room.Value.Coord;
-            Player.Health = room.Value.Damage == true ? Player.Health - 2 : Player.Health;
+            if (room.Value.Damage == true) Player.Health -= 2;
             Player.Health = room.Value.Health;
             Player.Wallet += room.Value.Coins;
-
         }
         private void RandomizeLinks() // назвать по другому
         {
-
             while (LinksRoom.Count != 3)
             {
                 int move = rnd.Next(-2, 3);
@@ -130,9 +146,7 @@ namespace ConsoleApp2
                         SetLinks(-2);
                         break;
                 }
-
             }
-
             // это временно. для вывода информации
             SL_Manager.Save(Player /*добавить Player*/, SL_Manager.Path, true);
             NewLinksRoom = CopyDictionary(LinksRoom);
@@ -160,7 +174,6 @@ namespace ConsoleApp2
                 }
             }
         }
-
         private bool CheckContainceByCoords(List<Room> secondsRooms, Room currentRoom, int move)
         {
             foreach (var item in secondsRooms)

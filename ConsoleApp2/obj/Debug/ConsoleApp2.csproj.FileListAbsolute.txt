@@ -12,5 +12,4 @@ C:\Users\vaso\Source\Repos\3D-Labirinte\ConsoleApp2\obj\Debug\ConsoleApp2.csproj
 C:\Users\vaso\Source\Repos\3D-Labirinte\ConsoleApp2\obj\Debug\ConsoleApp2.csproj.CoreCompileInputs.cache
 C:\Users\vaso\Source\Repos\3D-Labirinte\ConsoleApp2\obj\Debug\ConsoleApp2.exe
 C:\Users\vaso\Source\Repos\3D-Labirinte\ConsoleApp2\obj\Debug\ConsoleApp2.pdb
-C:\Users\STUDENT\source\repos\3D-Labirinte\ConsoleApp2\bin\Debug\SL_Library.dll
-C:\Users\STUDENT\source\repos\3D-Labirinte\ConsoleApp2\obj\Debug\ConsoleApp2.csproj.CopyComplete
+C:\Users\STUDENT\Source\Repos\3D-Labirinte\ConsoleApp2\obj\Debug\ConsoleA.D5FB4C91.Up2Date
